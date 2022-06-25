@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/Game.cs" type="Script" id=1]
+[ext_resource path="res://scenes/Board.tscn" type="PackedScene" id=2]
+
+[node name="Game" type="CanvasLayer"]
+
+[node name="Game" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="Board" parent="Game" instance=ExtResource( 2 )]
