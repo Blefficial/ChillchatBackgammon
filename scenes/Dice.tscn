@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/DieThrowTween.cs" type="Script" id=1]
+[ext_resource path="res://assets/models/die/Die.glb" type="PackedScene" id=2]
+[ext_resource path="res://src/Dice.cs" type="Script" id=3]
+
+[node name="Dice" type="Spatial"]
+script = ExtResource( 3 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 20, 0 )
+fov = 83.4
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.3566, 17.5346 )
+light_energy = 2.555
+light_indirect_energy = 0.0
+light_specular = 0.0
+omni_range = 22.8968
+
+[node name="OmniLight3" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -15.1355, 11.3566, -0.87682 )
+light_energy = 2.555
+light_indirect_energy = 0.0
+light_specular = 0.0
+omni_range = 22.8968
+
+[node name="OmniLight4" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.1005, 11.3566, -0.87682 )
+light_energy = 2.555
+light_indirect_energy = 0.0
+light_specular = 0.0
+omni_range = 22.8968
+
+[node name="OmniLight2" type="OmniLight" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.3566, -16.6016 )
+light_energy = 2.555
+light_indirect_energy = 0.0
+light_specular = 0.0
+omni_range = 22.8968
+
+[node name="Die1" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0 )
+
+[node name="Die2" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0 )
+
+[node name="DieThrowTween" type="Tween" parent="."]
+script = ExtResource( 1 )

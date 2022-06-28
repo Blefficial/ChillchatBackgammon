@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/Dice.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/DiceRenderer.cs" type="Script" id=2]
+[ext_resource path="res://assets/images/dice/dice_one.png" type="Texture" id=3]
+
+[node name="DiceRenderer" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 960, 540 )
+texture = ExtResource( 3 )
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 1920, 1080 )
+transparent_bg = true
+render_target_v_flip = true
+
+[node name="Dice" parent="Viewport" instance=ExtResource( 1 )]

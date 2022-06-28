@@ -4,23 +4,42 @@ using System.Collections.Generic;
 
 public class Board : Node2D
 {
-	BoardRenderer _renderer;
-	Label _diceLabel;
 	RandomNumberGenerator _rng;
 
 	private int[,] _boardPoints = new int[24, 5];
 	public int[,] BoardPoints 	{ get { return _boardPoints; } }
 	private int[] _wall			= new int[20];
-	public int[] Wall 			{ get {return _wall; } }
+	public int[] Wall 			{ get { return _wall; } }
 	private List<int> _moves 	= new List<int>();
 	private int activeColumn 	= -1;
 	private int _activePlayer 	= 1;
 	private int[] _helperMove	= new int[2] { -1, -1 };
+	private Vector2 _boardSize	= Constants.BOARD_SIZE;
+	private float _spacerWidth 	= Constants.BOARD_SPACER_WIDTH;
 
 	[Signal]
 	delegate void OnBoardUpdate();
+	[Signal]
+	delegate void OnMovePiece(int[] from, int[] to);
+	[Signal]
+	delegate void OnMovePieceToWall(int wallIndex);
+	[Signal]
+	delegate void OnMovePieceFromWall(int wallIndex, int[] to);
+	[Signal]
+	delegate void OnDiceThrow(List<int> result);
+	[Signal]
+	delegate void MoveUsed(int index);
+	[Signal]
+	delegate void UpdateMovesLeft(List<int> movesLeft);
+	[Signal]
+	delegate void OnGameAlert(string alert);
 
 	public override void _Ready()
+	{
+		_rng		= new RandomNumberGenerator();
+	}
+
+	public void Initialize()
 	{
 		_AddPiece(1, 11);
 		_AddPiece(1, 11);
@@ -60,16 +79,14 @@ public class Board : Node2D
 		_AddPiece(2, 23);
 		_AddPiece(2, 23);
 
-		_renderer 	= GetNode<BoardRenderer>("BoardRenderer") as BoardRenderer;
-		_diceLabel 	= GetNode<Label>("DiceLabel") as Label;
-		_rng		= new RandomNumberGenerator();
-
-		_wall[0] = 1;
-		_wall[10] = 2;
-
 		ThrowDice();
 		HasValidMove(this._activePlayer, _moves.ToArray());
 		EmitSignal("OnBoardUpdate");
+	}
+
+	private void _SendGameAlert(string alert)
+	{
+		EmitSignal("OnGameAlert", alert);
 	}
 
 	private int _GetTopPiece(int column) 
@@ -125,7 +142,7 @@ public class Board : Node2D
 		_helperMove[0] = column;
 		_helperMove[1] = position;
 		GD.Print("Set helper move " + column + ", " + position);
-		_renderer.Update();
+		//EmitSignal("OnBoardUpdate");
 	}
 
 	public bool IsHelperMove(int column, int position)
@@ -151,7 +168,7 @@ public class Board : Node2D
 	{
 		int nextFreeWallSlot 	= _GetNextFreeWallSlot(player);
 		_wall[nextFreeWallSlot] = player;
-		_renderer.Update();
+		EmitSignal("OnMovePieceToWall", nextFreeWallSlot);
 	}
 
 	private void _ReplacePiece(int fromColumn, int toColumn)
@@ -162,6 +179,8 @@ public class Board : Node2D
 		_boardPoints[toColumn, 0] 			= piece;
 		_boardPoints[fromColumn, topPiece] 	= 0;
 		_AddPieceToWall(3 - _activePlayer);
+		
+		EmitSignal("OnMovePiece", new int[]{ fromColumn, topPiece }, new int[]{ toColumn, 0 });
 	}
 
 	private void _MovePiece(int fromColumn, int toColumn)
@@ -172,17 +191,10 @@ public class Board : Node2D
 
 		_boardPoints[toColumn, freeSlot] 	= piece;
 		_boardPoints[fromColumn, topPiece] 	= 0;
+
+		EmitSignal("OnMovePiece", new int[]{ fromColumn, topPiece }, new int[]{ toColumn, freeSlot });
 	}
 
-	private void _UpdateDiceLabel() {
-		String rolls = "Player" + _activePlayer + ": ";
-		foreach(int move in _moves) 
-			{
-				rolls+= String.Format(" [{0,1:D}] ", move);
-			}
-		_diceLabel.Text = rolls;
-	}
-	
 	public void ThrowDice()
 	{
 		_rng.Randomize();
@@ -191,23 +203,24 @@ public class Board : Node2D
 		_rng.Randomize();
 		int dice2 = _rng.RandiRange(1, 6);
 
+		_moves.Add(dice1);
+		_moves.Add(dice2);
+
 		if (dice1 == dice2) 
 		{
 			_moves.Add(dice1);
 			_moves.Add(dice1);
-			_moves.Add(dice1);
-			_moves.Add(dice1);
+		}
 
-			GD.Print(String.Format("Player {0,1:D} rolled the dice [{1,1:D}], [{2,1:D}], [{3,1:D}], [{4,1:D}]", _activePlayer, _moves[0], _moves[1], _moves[2], _moves[3]));
-			_UpdateDiceLabel();
-			return;
-		} 
+		string result = String.Format("Player {0,1:D} rolled the dice: ", _activePlayer);
 
-		_moves.Add(dice1);
-		_moves.Add(dice2);
+		foreach (int move in _moves)
+		{
+			result += String.Format("[{0:D}]", move);
+		}
 
-		GD.Print(String.Format("Player {0,1:D} rolled the dice [{1,1:D}], [{2,1:D}]", _activePlayer, _moves[0], _moves[1]));
-		_UpdateDiceLabel();
+		GD.Print(result);
+		EmitSignal("OnDiceThrow", _moves);
 	}
 
 	private bool _IsWallOccupied(int player)
@@ -351,23 +364,29 @@ public class Board : Node2D
 
 	private void _ChangeTurn()
 	{
-		this._activePlayer = this._activePlayer == 1 ? 2 : 1;
+		this._activePlayer 	= this._activePlayer == 1 ? 2 : 1;
+		string player 		= this._activePlayer == 1 ? "RED" : "WHITE";
 		GD.Print("Player " + _activePlayer + "'s turn!");
 		_moves.Clear();
 		ThrowDice();
-		if (!HasValidMove(this._activePlayer, _moves.ToArray())) _ChangeTurn();
+		if (!HasValidMove(this._activePlayer, _moves.ToArray()))
+		{
+			_ChangeTurn();
+			return;
+		}
+
+		_SendGameAlert(player + "'s turn!");
 	}
 
 	private void _UseMove(int pointsMoved) 
 	{
+		EmitSignal("MoveUsed", _moves.FindLastIndex((match) => match == pointsMoved));
 		_moves.Remove(pointsMoved);
-		_UpdateDiceLabel();
 	}
 
 	private void _OnSuccessfulMove(int distance)
 	{
 		_SetHelperMove(-1, -1);
-		_renderer.Update();
 		_UseMove(distance);
 		string movesLeft = "Player" + this._activePlayer + " has " + _moves.Count + " move(s) left:";
 
@@ -382,11 +401,9 @@ public class Board : Node2D
 		{
 			_ChangeTurn();
 		}
-
-		EmitSignal("OnBoardUpdate");
 	}
 
-	private void _OnSuccessfulMove(int fromColumn, int toColumn) 
+	private void _OnSuccessfulMove(int fromColumn, int toColumn)
 	{
 		int pointsMoved = Math.Abs(toColumn - fromColumn);
 		_OnSuccessfulMove(pointsMoved);
@@ -399,12 +416,14 @@ public class Board : Node2D
 			if (fromColumn > toColumn) 
 			{
 				GD.Print("Unable to reach: Player 1 must move clockwise.");
+				_SendGameAlert("RED must move clockwise");
 				return false;
 			}
 		} 
 		else if (fromColumn < toColumn)
 		{
 			GD.Print("Unable to reach: Player 2 must move counter-clockwise.");
+			_SendGameAlert("WHITE must move counter-clockwise");
 			return false;
 		}
 
@@ -428,9 +447,12 @@ public class Board : Node2D
 		}
 		
 		int freeSlot = _GetNextFreeSlot(toColumn);
+		int wallIndex = _GetTopWallPiece(_activePlayer);
 
 		_boardPoints[toColumn, freeSlot] 		= _activePlayer;
-		_wall[_GetTopWallPiece(_activePlayer)] 	= 0;
+		_wall[wallIndex] 	= 0;
+
+		EmitSignal("OnMovePieceFromWall", wallIndex, new int[] { toColumn, freeSlot });
 	}
 
 	private void _AttemptMoveFromWall(int toColumn)
@@ -450,6 +472,7 @@ public class Board : Node2D
 		if (!canReach)
 		{
 			GD.Print("Unable to move from wall, no moves left matched the attempted move.");
+			_SendGameAlert("Unable to move from wall, no moves left matched the attempted move.");
 			return;
 		}
 
@@ -457,6 +480,7 @@ public class Board : Node2D
 		if (topPieceIndex > 4)
 		{
 			GD.Print("Unable to move from wall, target column is full.");
+			_SendGameAlert("Unable to move from wall, target column is full.");
 			return;
 		};
 
@@ -487,7 +511,7 @@ public class Board : Node2D
 		GD.Print("Failed to move from wall");
 	}
 
-	public void AttemptMove(int fromColumn, int toColumn) 
+	private void _AttemptMove(int fromColumn, int toColumn) 
 	{
 		if (fromColumn == toColumn) return;
 		
@@ -543,6 +567,37 @@ public class Board : Node2D
 		}
 	}
 
+	public bool IsMouseInsideWall(float mouseX, float mouseY)
+	{
+		float leftBorder 	= this.Position.x + _boardSize.x * 0.5f - _spacerWidth * 0.5f;
+		float rightBorder 	= this.Position.x + _boardSize.x * 0.5f + _spacerWidth * 0.5f;
+		float bottomBorder 	= this.Position.y + _boardSize.y;
+
+		return mouseX > leftBorder && mouseX < rightBorder && mouseY > this.Position.y && mouseY < bottomBorder;
+	}
+
+	public int getColumn(float mouseX, float mouseY)
+	{
+		int column;
+		float halfHeight 	= _boardSize.y * 0.5f;
+		float halfWidth 	= _boardSize.x * 0.5f;
+		float xOffset 		= 0;
+
+		if (mouseX > this.Position.x + halfWidth)
+		{
+			xOffset = _spacerWidth;
+		}
+
+		column = 12 - Mathf.CeilToInt((( Mathf.Max(mouseX - xOffset - this.Position.x, 0)) / (_boardSize.x - _spacerWidth)) * 12);
+
+		if (mouseY < this.Position.y + halfHeight)
+		{	
+			column = 12 + Mathf.FloorToInt((( Mathf.Max(mouseX - xOffset - this.Position.x, 0)) / (_boardSize.x - _spacerWidth)) * 12);
+		}
+
+		return Mathf.Clamp( column, 0, 23 );
+	}
+
 	public override void _Process(float delta)
 	{
 		if (Input.IsActionJustPressed("mouse_left_button"))
@@ -551,20 +606,20 @@ public class Board : Node2D
 
 			if (_IsWallOccupied(_activePlayer))
 			{
-				if (_renderer.IsMouseInsideWall(mousePosition.x, mousePosition.y))
+				if (IsMouseInsideWall(mousePosition.x, mousePosition.y))
 				{
 					this.activeColumn = -2;
 					return;
 				}
 			}
 
-			this.activeColumn = _renderer.getColumn(mousePosition.x, mousePosition.y);
+			this.activeColumn = getColumn(mousePosition.x, mousePosition.y);
 		}
 
 		if (Input.IsActionJustReleased("mouse_left_button"))
 		{
 			Vector2 mousePosition 	= GetViewport().GetMousePosition();
-			int targetColumn 		= _renderer.getColumn(mousePosition.x, mousePosition.y);
+			int targetColumn 		= getColumn(mousePosition.x, mousePosition.y);
 
 			if (_IsWallOccupied(_activePlayer))
 			{
@@ -575,10 +630,11 @@ public class Board : Node2D
 				}
 
 				GD.Print("Player must move a piece from the wall!");
+				_SendGameAlert("Player must move a piece from the wall!");
 				return;
 			}
 
-			AttemptMove(this.activeColumn, targetColumn);
+			_AttemptMove(this.activeColumn, targetColumn);
 		}
 
 		if (Input.IsActionJustPressed("show_help"))
