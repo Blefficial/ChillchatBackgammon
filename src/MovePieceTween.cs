@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public class MovePieceTween : Tween
 {
@@ -80,22 +79,5 @@ public class MovePieceTween : Tween
 		);
 
 		Start();
-	}
-
-	public void AddPieceToWall(Sprite sprite)
-	{
-		InterpolateProperty(
-			sprite,
-			"scale",
-			Vector2.Zero,
-			sprite.Scale,
-			1,
-			TransitionType.Cubic,
-			EaseType.InOut
-		);
-		
-		sprite.Scale 	= Vector2.Zero;
-		Start();
-		sprite.Visible 	= true;
 	}
 }

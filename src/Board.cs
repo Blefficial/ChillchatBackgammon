@@ -6,10 +6,13 @@ public class Board : Node2D
 {
 	RandomNumberGenerator _rng;
 
-	private int[,] _boardPoints = new int[24, 5];
+	private int[,] _boardPoints = new int[Constants.BOARD_POINT_COUNT, Constants.BOARD_POINT_SIZE];
 	public int[,] BoardPoints 	{ get { return _boardPoints; } }
-	private int[] _wall			= new int[20];
-	public int[] Wall 			{ get { return _wall; } }
+
+	private static int _boardHalfSize 	= Constants.BOARD_WALL_HALF_SIZE;
+	private int[] _wall					= new int[_boardHalfSize * 2];
+	public int[] Wall 					{ get { return _wall; } }
+
 	private List<int> _moves 	= new List<int>();
 	private int activeColumn 	= -1;
 	private int _activePlayer 	= 1;
@@ -32,6 +35,8 @@ public class Board : Node2D
 	[Signal]
 	delegate void UpdateMovesLeft(List<int> movesLeft);
 	[Signal]
+	delegate void OnBearOff(int player, int fromColumn, int pieceIndex);
+	[Signal]
 	delegate void OnGameAlert(string alert);
 
 	public override void _Ready()
@@ -41,47 +46,71 @@ public class Board : Node2D
 
 	public void Initialize()
 	{
-		_AddPiece(1, 11);
-		_AddPiece(1, 11);
-		_AddPiece(1, 11);
-		_AddPiece(1, 11);
-		_AddPiece(1, 11);
+		//_AddDefaultPieces();
 
 		_AddPiece(1, 18);
-		_AddPiece(1, 18);
-		_AddPiece(1, 18);
-		_AddPiece(1, 18);
-		_AddPiece(1, 18);
-
-		_AddPiece(1, 16);
-		_AddPiece(1, 16);
-		_AddPiece(1, 16);
-
-		_AddPiece(1, 0);
-		_AddPiece(1, 0);
-
-		_AddPiece(2, 5);
-		_AddPiece(2, 5);
-		_AddPiece(2, 5);
-		_AddPiece(2, 5);
+		_AddPiece(2, 0);
+		_AddPiece(2, 1);
+		_AddPiece(2, 2);
+		_AddPiece(2, 3);
+		_AddPiece(2, 4);
 		_AddPiece(2, 5);
 
-		_AddPiece(2, 12);
-		_AddPiece(2, 12);
-		_AddPiece(2, 12);
-		_AddPiece(2, 12);
-		_AddPiece(2, 12);
-
-		_AddPiece(2, 7);
-		_AddPiece(2, 7);
-		_AddPiece(2, 7);
-
-		_AddPiece(2, 23);
-		_AddPiece(2, 23);
+		_wall[0] = 1;
+		_wall[1] = 1;
+		_wall[2] = 1;
+		_wall[3] = 1;
+		_wall[4] = 1;
+		_wall[5] = 1;
+		_wall[6] = 1;
+		_wall[7] = 1;
+		_wall[8] = 1;
+		_wall[9] = 1;
 
 		ThrowDice();
 		HasValidMove(this._activePlayer, _moves.ToArray());
 		EmitSignal("OnBoardUpdate");
+	}
+
+	private void _AddDefaultPieces()
+	{
+		_AddPiece(1, 11);
+		_AddPiece(1, 11);
+		_AddPiece(1, 11);
+		_AddPiece(1, 11);
+		_AddPiece(1, 11);
+
+		_AddPiece(1, 18);
+		_AddPiece(1, 18);
+		_AddPiece(1, 18);
+		_AddPiece(1, 18);
+		_AddPiece(1, 18);
+
+		_AddPiece(1, 16);
+		_AddPiece(1, 16);
+		_AddPiece(1, 16);
+
+		_AddPiece(1, 0);
+		_AddPiece(1, 0);
+
+		_AddPiece(2, 5);
+		_AddPiece(2, 5);
+		_AddPiece(2, 5);
+		_AddPiece(2, 5);
+		_AddPiece(2, 5);
+
+		_AddPiece(2, 12);
+		_AddPiece(2, 12);
+		_AddPiece(2, 12);
+		_AddPiece(2, 12);
+		_AddPiece(2, 12);
+
+		_AddPiece(2, 7);
+		_AddPiece(2, 7);
+		_AddPiece(2, 7);
+
+		_AddPiece(2, 23);
+		_AddPiece(2, 23);
 	}
 
 	private void _SendGameAlert(string alert)
@@ -89,9 +118,11 @@ public class Board : Node2D
 		EmitSignal("OnGameAlert", alert);
 	}
 
-	private int _GetTopPiece(int column) 
+	private int _GetTopPieceIndex(int column) 
 	{
-		for (int i = 4; i >= 0; i--) 
+		if (column < 0 || column >= Constants.BOARD_POINT_COUNT) return -1;
+		
+		for (int i = 4; i >= 0; i--)
 		{
  			if (_boardPoints[column, i] != 0) return i;
 		}
@@ -101,7 +132,7 @@ public class Board : Node2D
 
 	private int _GetNextFreeSlot(int column) 
 	{
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < Constants.BOARD_POINT_SIZE; i++)
 		{
  			if (_boardPoints[column, i] == 0) return i;
 		}
@@ -111,8 +142,10 @@ public class Board : Node2D
 
 	private int _GetTopWallPiece(int player) 
 	{
-		int count = player == 1 ? 0 : 10;
-		for (int i = count + 9; i >= count; i--) 
+		int startIndex 	= player == 1 ? 0 : _boardHalfSize - 1;
+		int endIndex 	= player == 1 ? _boardHalfSize : _boardHalfSize * 2;
+
+		for (int i = startIndex; i < endIndex; i++) 
 		{
  			if (_wall[i] != 0) return i;
 		}
@@ -173,7 +206,7 @@ public class Board : Node2D
 
 	private void _ReplacePiece(int fromColumn, int toColumn)
 	{
-		int topPiece = _GetTopPiece(fromColumn);
+		int topPiece = _GetTopPieceIndex(fromColumn);
 		int piece 	 = _boardPoints[fromColumn, topPiece];
 
 		_boardPoints[toColumn, 0] 			= piece;
@@ -185,7 +218,7 @@ public class Board : Node2D
 
 	private void _MovePiece(int fromColumn, int toColumn)
 	{
-		int topPiece = _GetTopPiece(fromColumn);
+		int topPiece = _GetTopPieceIndex(fromColumn);
 		int freeSlot = _GetNextFreeSlot(toColumn);
 		int piece 	 = _boardPoints[fromColumn, topPiece];
 
@@ -223,12 +256,69 @@ public class Board : Node2D
 		EmitSignal("OnDiceThrow", _moves);
 	}
 
+	private void _OnGameFinished()
+	{
+		_SendGameAlert(String.Format("Game Finished! " + (_activePlayer == 1 ? "RED" : "WHITE") + " is the winner!"));
+	}
+
+	private void _OnBearOff(int player, int move)
+	{
+		_UseMove(move);
+		EmitSignal("OnBearOff");
+
+		for (int i = 0; i < _boardPoints.GetLength(0); i++)
+		{
+			if (_boardPoints[i, 0] == player) break;
+
+			_OnGameFinished();
+		}
+
+		if (_moves.Count == 0)
+		{
+			_ChangeTurn();
+		}
+	}
+
+	private void _BearOff(int player, int fromColumn, int pieceIndex)
+	{
+		_boardPoints[fromColumn, pieceIndex] = 0;
+	}
+	
+	private void _AttemptBearOff(int player, int fromColumn)
+	{
+		int direction = player == 1 ? 1 : -1;
+		int homeOffset = player == 1 ? 24 : -1;
+		foreach (int move in _moves)
+		{
+			int targetColumn = homeOffset - (move * direction);
+			int topPieceIndex = _GetTopPieceIndex(fromColumn);
+			if (targetColumn == fromColumn && topPieceIndex > -1)
+			{
+				_OnBearOff(player, move);
+				_BearOff(player, fromColumn, topPieceIndex);
+				return;
+			}
+		}
+
+		GD.Print("Cannot bear off attempted piece");
+	}
+
+	private bool _CanBearOff(int player)
+	{
+		for (int column = 6; column < 18; column++)
+		{
+			if (_boardPoints[column, 0] == player) return false;
+		}
+		
+		return true;
+	}
+
 	private bool _IsWallOccupied(int player)
 	{
 		return player == 1 ? _GetNextFreeWallSlot(player) > 0 : _GetNextFreeWallSlot(player) > 10;
 	}
 
-	public int[] GetFirstValidMove(int player, int[] moves)
+	public int[] GetFirstValidMove(int player, int[] moves) // TODO: Perhaps rework to return a int[,,,] instead, containing int[fromColumn, fromIndex, toColumn, toIndex];
 	{
 		int direction = player == 1 ? 1 : -1;
 
@@ -237,7 +327,7 @@ public class Board : Node2D
 			foreach (int amount in moves)
 			{
 				int column  = player == 1 ? amount - 1 : 24 - amount;
-				int topPieceIndex 	= _GetTopPiece(column);
+				int topPieceIndex 	= _GetTopPieceIndex(column);
 				if (topPieceIndex == -1)
 				{
 					return new int[] { column, 0 };
@@ -259,22 +349,37 @@ public class Board : Node2D
 			return new int[2] { -1, -1 };
 		}
 
+		if (_CanBearOff(player))
+		{
+			int homeOffset = player == 1 ? 24 : -1;
+			
+			foreach (int move in moves)
+			{
+				int fromColumn = homeOffset - (move * direction);
+				if (_boardPoints[fromColumn, 0] == player)
+				{
+					GD.Print(String.Format("Found a valid move {0:D}->HOME", fromColumn));
+					return new int[] { fromColumn, 0 };
+				}
+			}
+		}
+
 		foreach	(int amount in moves)
 		 {
 			if (amount == 0) continue;
 
 			for (int column = 0; column < _boardPoints.GetLength(0); column++)
 			{
-				int topPieceIndex = _GetTopPiece(column);
+				int topPieceIndex = _GetTopPieceIndex(column);
 				if (topPieceIndex == -1) continue;
 
 				if (_boardPoints[column, topPieceIndex] != player) continue;
 
 				int move = amount * direction;
 				int targetColumn = column + move;
-				if (targetColumn > _boardPoints.GetLength(0) || targetColumn < 0) continue; // TODO: Add bearing off feature.
+				if (targetColumn > _boardPoints.GetLength(0) - 1 || targetColumn < 0) continue; // TODO: Add bearing off feature.
 
-				topPieceIndex = _GetTopPiece(targetColumn);
+				topPieceIndex = _GetTopPieceIndex(targetColumn);
 				if (topPieceIndex < 0) 
 				{
 					return new int[] { targetColumn, 0 };
@@ -300,8 +405,8 @@ public class Board : Node2D
 		{
 			foreach (int amount in moves)
 			{
-				int column  = player == 1 ? amount - 1 : 24 - amount;
-				int topPieceIndex 	= _GetTopPiece(column);
+				int column  		= player == 1 ? amount - 1 : 24 - amount;
+				int topPieceIndex 	= _GetTopPieceIndex(column);
 				if (topPieceIndex == -1)
 				{
 					GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
@@ -327,21 +432,36 @@ public class Board : Node2D
 			return false;
 		}
 
+		if (_CanBearOff(player))
+		{
+			int homeOffset = player == 1 ? 24 : -1;
+			
+			foreach (int move in moves)
+			{
+				int fromColumn = homeOffset - (move * direction);
+				if (_boardPoints[fromColumn, 0] == player)
+				{
+					GD.Print(String.Format("Found a valid move {0:D}->HOME", fromColumn));
+					return true;
+				}
+			}
+		}
+
 		foreach	(int amount in moves)
 		 {
 			if (amount == 0) continue;
 
 			for (int column = 0; column < _boardPoints.GetLength(0); column++)
 			{
-				int topPieceIndex = _GetTopPiece(column);
+				int topPieceIndex = _GetTopPieceIndex(column);
 				if (topPieceIndex == -1) continue; // Move onto next column if this column contains no pieces.
 
 				if (_boardPoints[column, topPieceIndex] != player) continue; // Move onto next column if the piece is not owned by player.
 
 				int move = amount * direction;
-				if (column + move > _boardPoints.GetLength(0) || column + move < 0) continue; // TODO: Add bearing off feature.
+				if (column + move > _boardPoints.GetLength(0) - 1 || column + move < 0) continue; // TODO: Add bearing off feature.
 
-				topPieceIndex = _GetTopPiece(column + move);
+				topPieceIndex = _GetTopPieceIndex(column + move);
 				if (topPieceIndex < 0)
 				{
 					GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
@@ -446,11 +566,11 @@ public class Board : Node2D
 			_AddPieceToWall(opposingPlayer);
 		}
 		
-		int freeSlot = _GetNextFreeSlot(toColumn);
-		int wallIndex = _GetTopWallPiece(_activePlayer);
+		int freeSlot 	= _GetNextFreeSlot(toColumn);
+		int wallIndex 	= _GetTopWallPiece(_activePlayer);
 
-		_boardPoints[toColumn, freeSlot] 		= _activePlayer;
-		_wall[wallIndex] 	= 0;
+		_boardPoints[toColumn, freeSlot] = _activePlayer;
+		_wall[wallIndex] = 0;
 
 		EmitSignal("OnMovePieceFromWall", wallIndex, new int[] { toColumn, freeSlot });
 	}
@@ -476,7 +596,7 @@ public class Board : Node2D
 			return;
 		}
 
-		int topPieceIndex = _GetTopPiece(toColumn);
+		int topPieceIndex = _GetTopPieceIndex(toColumn);
 		if (topPieceIndex > 4)
 		{
 			GD.Print("Unable to move from wall, target column is full.");
@@ -521,7 +641,7 @@ public class Board : Node2D
 			return;
 		}
 
-		int topPieceIndex = _GetTopPiece(fromColumn);
+		int topPieceIndex = _GetTopPieceIndex(fromColumn);
 		if (topPieceIndex == -1) {
 			GD.Print("Move failed: No piece in column: " + fromColumn);
 			return;
@@ -533,7 +653,7 @@ public class Board : Node2D
 			return;
 		}
 
-		topPieceIndex = _GetTopPiece(toColumn);
+		topPieceIndex = _GetTopPieceIndex(toColumn);
 		if (topPieceIndex < 0)
 		{
 			GD.Print("Move success: " + fromColumn + "->" + toColumn);
@@ -567,6 +687,15 @@ public class Board : Node2D
 		}
 	}
 
+	public bool IsMouseInsideHome(float mouseX, float mouseY)
+	{
+		float leftBorder 	= this.Position.x + _boardSize.x + 10;
+		float rightBorder 	= this.Position.x + _boardSize.x + 110;
+		float bottomBorder 	= this.Position.y + _boardSize.y;
+
+		return mouseX > leftBorder && mouseX < rightBorder && mouseY > this.Position.y && mouseY < bottomBorder;
+	}
+
 	public bool IsMouseInsideWall(float mouseX, float mouseY)
 	{
 		float leftBorder 	= this.Position.x + _boardSize.x * 0.5f - _spacerWidth * 0.5f;
@@ -576,7 +705,7 @@ public class Board : Node2D
 		return mouseX > leftBorder && mouseX < rightBorder && mouseY > this.Position.y && mouseY < bottomBorder;
 	}
 
-	public int getColumn(float mouseX, float mouseY)
+	public int GetColumn(float mouseX, float mouseY)
 	{
 		int column;
 		float halfHeight 	= _boardSize.y * 0.5f;
@@ -613,13 +742,13 @@ public class Board : Node2D
 				}
 			}
 
-			this.activeColumn = getColumn(mousePosition.x, mousePosition.y);
+			this.activeColumn = GetColumn(mousePosition.x, mousePosition.y);
 		}
 
 		if (Input.IsActionJustReleased("mouse_left_button"))
 		{
 			Vector2 mousePosition 	= GetViewport().GetMousePosition();
-			int targetColumn 		= getColumn(mousePosition.x, mousePosition.y);
+			int targetColumn 		= GetColumn(mousePosition.x, mousePosition.y);
 
 			if (_IsWallOccupied(_activePlayer))
 			{
@@ -631,6 +760,12 @@ public class Board : Node2D
 
 				GD.Print("Player must move a piece from the wall!");
 				_SendGameAlert("Player must move a piece from the wall!");
+				return;
+			}
+
+			if (IsMouseInsideHome(mousePosition.x, mousePosition.y) && _CanBearOff(_activePlayer))
+			{
+				_AttemptBearOff(this._activePlayer, this.activeColumn);
 				return;
 			}
 
