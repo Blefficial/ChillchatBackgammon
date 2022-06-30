@@ -1,0 +1,85 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=1]
+[ext_resource path="res://src/main_menu/OptionsPopup.cs" type="Script" id=2]
+
+[node name="OptionsPopup" type="Popup"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -640.0
+margin_top = -354.0
+margin_right = 640.0
+margin_bottom = 354.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+margin_left = 40.0
+margin_right = 1240.0
+margin_bottom = 671.0
+
+[node name="OptionsLabel" type="Label" parent="Panel/VBoxContainer"]
+margin_right = 1200.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+size_flags_vertical = 0
+text = "Options"
+align = 1
+valign = 1
+
+[node name="TabContainer" type="TabContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 47.0
+
+[node name="Controls" type="Tabs" parent="Panel/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 24.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/TabContainer/Controls"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -600.0
+margin_top = -284.5
+margin_right = 600.0
+margin_bottom = 284.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlsDescLabel" type="Label" parent="Panel/TabContainer/Controls/VBoxContainer"]
+margin_right = 1200.0
+margin_bottom = 201.0
+text = "This game features a simple drag-and-drop gameplay mechanic. To move pieces, click on the desired piece, keep the mouse pressed and let go once over the target location.
+
+At the beginning of each round a player must roll the dice. To do so, simply clikc anywhere on screen. If no valid moves can be made after rolling the dice, the turn will immediately shift to the other player, whom must then roll the dice again."
+autowrap = true
+
+[node name="Audio" type="Tabs" parent="Panel/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 24.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -600.0
+margin_top = -282.0
+margin_right = 600.0
+margin_bottom = 318.0
+
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer"]
+margin_right = 1200.0
+margin_bottom = 4.0
+size_flags_vertical = 0

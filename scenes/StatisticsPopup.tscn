@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=1]
+[ext_resource path="res://src/main_menu/StatisticsPopup.cs" type="Script" id=2]
+
+[node name="StatisticsPopup" type="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 320.0
+margin_top = 186.0
+margin_right = -320.0
+margin_bottom = -186.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+margin_left = 40.0
+margin_right = 1240.0
+margin_bottom = 671.0
+
+[node name="StatisticsLabel" type="Label" parent="Panel/VBoxContainer"]
+margin_right = 1200.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+size_flags_vertical = 0
+text = "Statistics"
+align = 1
+valign = 1
+
+[node name="ElementDescriptions" type="HBoxContainer" parent="Panel/VBoxContainer"]
+margin_top = 54.0
+margin_right = 1200.0
+margin_bottom = 85.0
+
+[node name="PlayerLabel" type="Label" parent="Panel/VBoxContainer/ElementDescriptions"]
+margin_right = 236.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+text = "Player"
+
+[node name="WinsLabel" type="Label" parent="Panel/VBoxContainer/ElementDescriptions"]
+margin_left = 240.0
+margin_right = 477.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+text = "Wins"
+
+[node name="LossesLabel" type="Label" parent="Panel/VBoxContainer/ElementDescriptions"]
+margin_left = 481.0
+margin_right = 718.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+text = "Losses"
+
+[node name="WinPercentageLabel" type="Label" parent="Panel/VBoxContainer/ElementDescriptions"]
+margin_left = 722.0
+margin_right = 959.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+text = "Win %"
+
+[node name="TotalPointsLabel" type="Label" parent="Panel/VBoxContainer/ElementDescriptions"]
+margin_left = 963.0
+margin_right = 1200.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+text = "Total Points"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+margin_top = 89.0
+margin_right = 1200.0
+margin_bottom = 93.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
+margin_top = 97.0
+margin_right = 1200.0
+margin_bottom = 671.0
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer/MarginContainer"]
+margin_right = 1200.0
+margin_bottom = 574.0
+
+[node name="StatEntries" type="VBoxContainer" parent="Panel/VBoxContainer/MarginContainer/ScrollContainer"]
+margin_right = 1200.0
+size_flags_horizontal = 3

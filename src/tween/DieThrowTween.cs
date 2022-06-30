@@ -4,6 +4,7 @@ public class DieThrowTween : Tween
 {
 	public void ThrowTo(Spatial die, Vector3 rotation)
 	{
+		Vector3 diePosition = die.Translation;
 		InterpolateProperty(
 			die,
 			"rotation",
@@ -16,7 +17,7 @@ public class DieThrowTween : Tween
 			die,
 			"translation",
 			die.Translation,
-			die.Translation + new Vector3(0, 5, 0),
+			new Vector3(diePosition.x, 5, diePosition.z),
 			1,
 			TransitionType.Cubic,
 			EaseType.InOut

@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/fonts/MainFont72.tres" type="DynamicFont" id=2]
+[ext_resource path="res://src/main_menu/MainMenu.cs" type="Script" id=3]
+[ext_resource path="res://scenes/PlayPopup.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/StatisticsPopup.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/OptionsPopup.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/background/MainMenuBackground.png" type="Texture" id=7]
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+texture = ExtResource( 7 )
+
+[node name="TitleLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -214.5
+margin_top = 200.0
+margin_right = 214.5
+margin_bottom = 290.0
+custom_fonts/font = ExtResource( 2 )
+text = "Backgammon"
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -51.5
+margin_top = -80.0
+margin_right = 51.5
+margin_bottom = 80.0
+
+[node name="PlayButton" type="Button" parent="ButtonContainer"]
+margin_right = 103.0
+margin_bottom = 37.0
+focus_neighbour_top = NodePath("../QuitButton")
+focus_neighbour_bottom = NodePath("../OptionsButton")
+focus_next = NodePath("../OptionsButton")
+focus_previous = NodePath("../QuitButton")
+text = "Play"
+
+[node name="OptionsButton" type="Button" parent="ButtonContainer"]
+margin_top = 41.0
+margin_right = 103.0
+margin_bottom = 78.0
+focus_neighbour_top = NodePath("../PlayButton")
+focus_neighbour_bottom = NodePath("../StatisticsButton")
+focus_next = NodePath("../StatisticsButton")
+focus_previous = NodePath("../PlayButton")
+text = "Options"
+
+[node name="StatisticsButton" type="Button" parent="ButtonContainer"]
+margin_top = 82.0
+margin_right = 103.0
+margin_bottom = 119.0
+focus_neighbour_top = NodePath("../OptionsButton")
+focus_neighbour_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../OptionsButton")
+text = "Statistics"
+
+[node name="QuitButton" type="Button" parent="ButtonContainer"]
+margin_top = 123.0
+margin_right = 103.0
+margin_bottom = 160.0
+focus_neighbour_top = NodePath("../StatisticsButton")
+focus_neighbour_bottom = NodePath("../PlayButton")
+focus_next = NodePath("../PlayButton")
+focus_previous = NodePath("../StatisticsButton")
+text = "Quit"
+
+[node name="PlayPopup" parent="." instance=ExtResource( 4 )]
+
+[node name="OptionsPopup" parent="." instance=ExtResource( 6 )]
+
+[node name="StatisticsPopup" parent="." instance=ExtResource( 5 )]
+
+[connection signal="pressed" from="ButtonContainer/PlayButton" to="." method="_on_PlayButton_pressed"]
+[connection signal="pressed" from="ButtonContainer/OptionsButton" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="ButtonContainer/StatisticsButton" to="." method="_on_StatisticsButton_pressed"]
+[connection signal="pressed" from="ButtonContainer/QuitButton" to="." method="_on_QuitButton_pressed"]

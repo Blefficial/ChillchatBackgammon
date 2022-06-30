@@ -1,0 +1,122 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=1]
+[ext_resource path="res://src/main_menu/PlayPopup.cs" type="Script" id=2]
+[ext_resource path="res://assets/fonts/MainFont18.tres" type="DynamicFont" id=3]
+[ext_resource path="res://src/main_menu/StakesLineEdit.cs" type="Script" id=4]
+
+[node name="PlayPopup" type="Popup"]
+visible = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 721.0
+margin_top = 404.0
+margin_right = -721.0
+margin_bottom = -404.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="NewGameLabel" type="Label" parent="Panel/VBoxContainer"]
+margin_right = 478.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+text = "New Game"
+align = 1
+valign = 1
+
+[node name="NameContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
+margin_top = 54.0
+margin_right = 478.0
+margin_bottom = 119.0
+rect_min_size = Vector2( 0, 65 )
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/NameContainer"]
+margin_right = 478.0
+margin_bottom = 65.0
+alignment = 1
+
+[node name="Player1LineEdit" type="LineEdit" parent="Panel/VBoxContainer/NameContainer/HBoxContainer"]
+margin_left = 35.0
+margin_top = 20.0
+margin_right = 185.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 4
+placeholder_text = "(Red)"
+caret_blink = true
+
+[node name="VSLabel" type="Label" parent="Panel/VBoxContainer/NameContainer/HBoxContainer"]
+margin_left = 189.0
+margin_top = 17.0
+margin_right = 289.0
+margin_bottom = 48.0
+grow_horizontal = 2
+rect_min_size = Vector2( 100, 0 )
+text = "VS"
+align = 1
+
+[node name="Player2LineEdit" type="LineEdit" parent="Panel/VBoxContainer/NameContainer/HBoxContainer"]
+margin_left = 293.0
+margin_top = 20.0
+margin_right = 443.0
+margin_bottom = 44.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_vertical = 4
+placeholder_text = "(White)"
+caret_blink = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer"]
+margin_top = 123.0
+margin_right = 478.0
+margin_bottom = 272.0
+size_flags_vertical = 3
+alignment = 1
+
+[node name="StakesLabel" type="Label" parent="Panel/VBoxContainer/VBoxContainer"]
+margin_top = 17.0
+margin_right = 478.0
+margin_bottom = 47.0
+grow_horizontal = 2
+rect_min_size = Vector2( 100, 30 )
+custom_fonts/font = ExtResource( 3 )
+text = "Stakes"
+align = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/VBoxContainer"]
+margin_top = 51.0
+margin_right = 478.0
+margin_bottom = 91.0
+rect_min_size = Vector2( 0, 40 )
+
+[node name="StakesLineEdit" type="LineEdit" parent="Panel/VBoxContainer/VBoxContainer/MarginContainer"]
+margin_left = 164.0
+margin_top = 8.0
+margin_right = 314.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+placeholder_text = "Stakes"
+caret_blink = true
+script = ExtResource( 4 )
+
+[node name="PlayButton" type="Button" parent="Panel/VBoxContainer/VBoxContainer"]
+margin_left = 209.0
+margin_top = 95.0
+margin_right = 269.0
+margin_bottom = 132.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Play"
+
+[connection signal="text_changed" from="Panel/VBoxContainer/VBoxContainer/MarginContainer/StakesLineEdit" to="Panel/VBoxContainer/VBoxContainer/MarginContainer/StakesLineEdit" method="_on_StakesLineEdit_text_changed"]
+[connection signal="pressed" from="Panel/VBoxContainer/VBoxContainer/PlayButton" to="." method="_on_PlayButton_pressed"]

@@ -20,6 +20,7 @@ public class DiceResultTween : Tween
 
 	public void HideResult(TextureRect textureRect, float delay)
 	{
+		Stop(textureRect);
 		InterpolateProperty(
 			textureRect,
 			"rect_scale",

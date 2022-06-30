@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/fonts/MainFont72.tres" type="DynamicFont" id=2]
+[ext_resource path="res://src/game/GameFinishedPopup.cs" type="Script" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0823529, 0.0823529, 0.0823529, 0.917647 )
+
+[node name="GameFinishedPopup" type="Popup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="GameFinishedLabel" type="Label" parent="VBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 0, 300 )
+custom_fonts/font = ExtResource( 2 )
+text = "Game Finished!"
+align = 1
+valign = 1
+
+[node name="WinnerLabel" type="Label" parent="VBoxContainer"]
+margin_top = 304.0
+margin_right = 1920.0
+margin_bottom = 335.0
+grow_horizontal = 2
+text = "_won and scored a _ (+_ points)!"
+align = 1
+
+[node name="QueryLabel" type="Label" parent="VBoxContainer"]
+margin_top = 339.0
+margin_right = 1920.0
+margin_bottom = 739.0
+rect_min_size = Vector2( 0, 400 )
+text = "Would you like to play again?"
+align = 1
+valign = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 743.0
+margin_right = 1920.0
+margin_bottom = 780.0
+grow_vertical = 0
+alignment = 1
+
+[node name="ReturnToMenuButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+margin_left = 765.0
+margin_right = 942.0
+margin_bottom = 37.0
+text = "Return to Menu"
+
+[node name="Spacer" type="MarginContainer" parent="VBoxContainer/ButtonContainer"]
+margin_left = 946.0
+margin_right = 1046.0
+margin_bottom = 37.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="RematchButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+margin_left = 1050.0
+margin_right = 1155.0
+margin_bottom = 37.0
+text = "Rematch"
+
+[connection signal="pressed" from="VBoxContainer/ButtonContainer/ReturnToMenuButton" to="." method="_on_ReturnToMenuButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonContainer/RematchButton" to="." method="_on_RematchButton_pressed"]

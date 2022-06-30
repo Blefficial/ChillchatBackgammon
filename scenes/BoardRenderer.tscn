@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://src/BoardRenderer.cs" type="Script" id=1]
-[ext_resource path="res://src/MovePieceTween.cs" type="Script" id=2]
-[ext_resource path="res://src/AddPieceToWallTween.cs" type="Script" id=3]
+[ext_resource path="res://src/board/BoardRenderer.cs" type="Script" id=1]
+[ext_resource path="res://src/tween/MovePieceTween.cs" type="Script" id=2]
+[ext_resource path="res://src/tween/AddPieceToWallTween.cs" type="Script" id=3]
+[ext_resource path="res://src/tween/BearOffTween.cs" type="Script" id=4]
 
 [node name="BoardRenderer" type="Node2D"]
 script = ExtResource( 1 )
@@ -12,3 +13,6 @@ script = ExtResource( 2 )
 
 [node name="AddPieceToWallTween" type="Tween" parent="."]
 script = ExtResource( 3 )
+
+[node name="BearOffTween" type="Tween" parent="."]
+script = ExtResource( 4 )

@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://src/DieThrowTween.cs" type="Script" id=1]
+[ext_resource path="res://src/tween/DieThrowTween.cs" type="Script" id=1]
 [ext_resource path="res://assets/models/die/Die.glb" type="PackedScene" id=2]
-[ext_resource path="res://src/Dice.cs" type="Script" id=3]
+[ext_resource path="res://src/dice/Dice.cs" type="Script" id=3]
 
 [node name="Dice" type="Spatial"]
 script = ExtResource( 3 )

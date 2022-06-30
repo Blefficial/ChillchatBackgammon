@@ -11,8 +11,13 @@ config_version=4
 [application]
 
 config/name="ChillchatBackgammon"
-run/main_scene="res://scenes/Game.tscn"
+run/main_scene="res://scenes/MainMenu.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Constants="*res://src/global/Constants.cs"
+PlayerData="*res://src/global/PlayerData.cs"
 
 [display]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://src/Board.cs" type="Script" id=1]
+[ext_resource path="res://src/board/Board.cs" type="Script" id=1]
 [ext_resource path="res://scenes/BoardRenderer.tscn" type="PackedScene" id=2]
 
 [node name="Board" type="Node2D"]
