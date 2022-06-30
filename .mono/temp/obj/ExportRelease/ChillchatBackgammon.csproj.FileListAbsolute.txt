@@ -1,0 +1,9 @@
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\bin\ExportRelease\ChillchatBackgammon.dll
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\bin\ExportRelease\ChillchatBackgammon.pdb
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.csproj.AssemblyReference.cache
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.AssemblyInfoInputs.cache
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.AssemblyInfo.cs
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.csproj.CoreCompileInputs.cache
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.dll
+D:\Programming\Godot Projects\ChillchatBackgammon\.mono\temp\obj\ExportRelease\ChillchatBackgammon.pdb

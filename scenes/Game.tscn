@@ -11,7 +11,7 @@
 [ext_resource path="res://src/tween/DiceResultTween.cs" type="Script" id=9]
 [ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=10]
 [ext_resource path="res://scenes/GameFinishedPopup.tscn" type="PackedScene" id=11]
-[ext_resource path="res://scenes/HomeRenderer.cs" type="Script" id=12]
+[ext_resource path="res://src/game/HomeRenderer.cs" type="Script" id=12]
 [ext_resource path="res://scenes/PausePopup.tscn" type="PackedScene" id=13]
 [ext_resource path="res://src/game/SoundEffectsPlayer.cs" type="Script" id=14]
 

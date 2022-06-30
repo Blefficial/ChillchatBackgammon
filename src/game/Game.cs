@@ -68,7 +68,6 @@ public class Game : CanvasLayer
 	{
 		_gameFinishedPopup.Hide();
 		_homeRenderer.Reset();
-		_board.Reset();
 		_board.Initialize();
 	}
 
