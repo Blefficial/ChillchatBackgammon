@@ -162,11 +162,6 @@ public class Board : Node2D
 		_ChangeBoardState(_boardState == -1 ? _previousBoardState : -1);
 	}
 
-	public void SetStakes()
-	{
-
-	}
-
 	private void _SendGameAlert(string alert)
 	{
 		EmitSignal("OnGameAlert", alert);

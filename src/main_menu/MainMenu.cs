@@ -12,7 +12,7 @@ public class MainMenu : Control
 		_playPopup 			= GetNode<PlayPopup>("PlayPopup") 				as PlayPopup;
 		_optionsPopup 		= GetNode<OptionsPopup>("OptionsPopup")			as OptionsPopup;
 		_statisticsPopup 	= GetNode<StatisticsPopup>("StatisticsPopup")	as StatisticsPopup;
-
+		
 		GetNode<Button>("ButtonContainer/PlayButton").GrabFocus();
 		_statisticsPopup.PopulateElementContainer();
 	}

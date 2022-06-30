@@ -1,21 +1,44 @@
-using Godot;
 using System;
+using Godot;
 
 public class OptionsPopup : Popup
 {
-	// Declare member variables here. Examples:
-	// private int a = 2;
-	// private string b = "text";
+	Slider _masterVolumeSlider;
+	Slider _sfxVolumeSlider;
+	Label _masterVolumeDBLabel;
+	Label _sfxVolumeDBLabel;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
+		_masterVolumeSlider 		= GetNode<Slider>("Panel/MarginContainer/TabContainer/Audio/VBoxContainer/MasterVolumeSlider") as Slider;
+		_sfxVolumeSlider 			= GetNode<Slider>("Panel/MarginContainer/TabContainer/Audio/VBoxContainer/SoundEffectVolumeSlider") as Slider;
+		_masterVolumeDBLabel 		= GetNode<Label>("Panel/MarginContainer/TabContainer/Audio/VBoxContainer/MasterVolumeLabels/DesibelLabel") as Label;
+		_sfxVolumeDBLabel 			= GetNode<Label>("Panel/MarginContainer/TabContainer/Audio/VBoxContainer/SoundEffectVolumeLabels/DesibelLabel") as Label;
+
+		float masterVolume 			= (float) PlayerData.SETTINGS["master_volume"];
+		float sfxVolume				= (float) PlayerData.SETTINGS["sfx_volume"];
+
+		_masterVolumeSlider.Value	= masterVolume;
+		_sfxVolumeSlider.Value		= sfxVolume;
+
+		_sfxVolumeDBLabel.Text 		= String.Format("{0:N0} dB", masterVolume);
+		_masterVolumeDBLabel.Text 	= String.Format("{0:N0} dB", sfxVolume);
+
+		AudioServer.SetBusVolumeDb(0, masterVolume);
+		AudioServer.SetBusVolumeDb(1, sfxVolume);
 	}
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+	private void _on_SoundEffectVolumeSlider_value_changed(float value)
+	{
+		PlayerData.SetSFXVolume(value);
+		_sfxVolumeDBLabel.Text = String.Format("{0:N0} dB", value);
+	}
+
+	private void _on_MasterVolumeSlider_value_changed(float value)
+	{
+		_masterVolumeDBLabel.Text = String.Format("{0:N0} dB", value);
+		PlayerData.SetMasterVolume(value);
+	}
 }
+
+

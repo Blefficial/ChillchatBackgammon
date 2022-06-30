@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/throw_dice_02.ogg-cdb966971da5a131355a7cbe8f493b8b.oggstr"
+
+[deps]
+
+source_file="res://assets/sfx/throw_dice_02.ogg"
+dest_files=[ "res://.import/throw_dice_02.ogg-cdb966971da5a131355a7cbe8f493b8b.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

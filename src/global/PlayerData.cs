@@ -2,8 +2,8 @@ using Godot;
 using Godot.Collections;
 
 public class PlayerData : Node {
-	private static string _SETTINGS_PATH 		= "res://save/settings";
-	private static string _PLAYER_STATS_PATH	= "res://save/stats";
+	private static string _SETTINGS_PATH 		= "user://settings";
+	private static string _PLAYER_STATS_PATH	= "user://stats";
 	public static Dictionary SETTINGS;
 	public static Dictionary<string, Dictionary<string, int>> PLAYER_STATS;
 
@@ -19,8 +19,8 @@ public class PlayerData : Node {
 		if (!file.FileExists(_SETTINGS_PATH))
 		{
 			SETTINGS = new Dictionary() {
-				{ "master_volume", -10 },
-				{ "sfx_volume", -10 }
+				{ "master_volume", -12 },
+				{ "sfx_volume", -12 }
 			};
 
 			SaveSettings();
@@ -38,6 +38,20 @@ public class PlayerData : Node {
 		file.Open(_SETTINGS_PATH, File.ModeFlags.Write);
 		file.StoreLine(JSON.Print(SETTINGS));
 		file.Close();
+	}
+
+	public static void SetMasterVolume(float volume)
+	{
+		SETTINGS["master_volume"] = volume;
+		AudioServer.SetBusVolumeDb(0, volume);
+		PlayerData.SaveSettings();
+	}
+
+	public static void SetSFXVolume(float volume)
+	{
+		SETTINGS["sfx_volume"] = volume;
+		AudioServer.SetBusVolumeDb(1, volume);
+		PlayerData.SaveSettings();
 	}
 
 	public static void LoadPlayerStats()

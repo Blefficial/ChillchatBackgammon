@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://src/game/Game.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Board.tscn" type="PackedScene" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://scenes/GameFinishedPopup.tscn" type="PackedScene" id=11]
 [ext_resource path="res://scenes/HomeRenderer.cs" type="Script" id=12]
 [ext_resource path="res://scenes/PausePopup.tscn" type="PackedScene" id=13]
+[ext_resource path="res://src/game/SoundEffectsPlayer.cs" type="Script" id=14]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -150,3 +151,7 @@ script = ExtResource( 9 )
 [node name="GameFinishedPopup" parent="." instance=ExtResource( 11 )]
 
 [node name="PausePopup" parent="." instance=ExtResource( 13 )]
+
+[node name="SoundEffectsPlayer" type="AudioStreamPlayer" parent="."]
+bus = "SoundEffects"
+script = ExtResource( 14 )

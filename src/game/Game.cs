@@ -10,10 +10,11 @@ public class Game : CanvasLayer
 	private Label				_player1Label;
 	private Label				_player2Label;
 	private Label				_activePlayerLabel;
-	private GameAlertTween 		_gameAlertTween;
+	private GameAlertTween		_gameAlertTween;
 	private DiceResultIndicator _resultIndicator;
 	private PausePopup			_pausePopup;
 	private GameFinishedPopup	_gameFinishedPopup;
+	private SoundEffectsPlayer 	_soundEffectsPlayer;
 
 	public override void _Ready()
 	{
@@ -28,14 +29,19 @@ public class Game : CanvasLayer
 		_resultIndicator	= GetNode<DiceResultIndicator>("DiceResultIndicator") 		as DiceResultIndicator;
 		_pausePopup			= GetNode<PausePopup>("PausePopup")							as PausePopup;
 		_gameFinishedPopup 	= GetNode<GameFinishedPopup>("GameFinishedPopup")			as GameFinishedPopup;
+		_soundEffectsPlayer = GetNode<SoundEffectsPlayer>("SoundEffectsPlayer")			as SoundEffectsPlayer;
 
-		_board.Connect("OnDiceThrow", 	_diceRenderer, 		"OnDiceThrow");
-		_board.Connect("OnDiceThrow", 	_resultIndicator, 	"UpdateIndicator");
-		_board.Connect("OnChangeTurn", 	this, 				"_OnChangeTurn");
-		_board.Connect("OnGameAlert", 	this, 				"_OnGameAlert");
-		_board.Connect("MoveUsed", 		_resultIndicator, 	"OnMoveUsed");
-		_board.Connect("OnGameFinished",this, 				"_OnGameFinished");
-		_board.Connect("OnBearOff",		_homeRenderer,		"OnBearOff");
+		_board.Connect("OnDiceThrow", 			_diceRenderer, 		 "OnDiceThrow");
+		_board.Connect("OnDiceThrow", 			_resultIndicator, 	 "UpdateIndicator");
+		_board.Connect("OnChangeTurn", 			this, 				 "_OnChangeTurn");
+		_board.Connect("OnGameAlert", 			this, 				 "_OnGameAlert");
+		_board.Connect("MoveUsed", 				_resultIndicator, 	 "OnMoveUsed");
+		_board.Connect("OnGameFinished",		this, 				 "_OnGameFinished");
+		_board.Connect("OnBearOff",				_homeRenderer,		 "OnBearOff");
+		_board.Connect("OnMovePiece",			_soundEffectsPlayer, "OnMovePiece");
+		_board.Connect("OnMovePieceFromWall",	_soundEffectsPlayer, "OnMovePieceFromWall");
+		_board.Connect("OnDiceThrow",			_soundEffectsPlayer, "OnDiceThrow");
+		_board.Connect("OnBearOff",				_soundEffectsPlayer, "OnBearOff");
 		_board.Initialize();
 
 		_pausePopup.Connect("OnPause", 			 	 this, 	"_OnPause");
