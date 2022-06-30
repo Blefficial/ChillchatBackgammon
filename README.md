@@ -9,7 +9,7 @@ Controls can also be viewed via the in-game menu.
 
 ## Rules
 
-Rules are per the classic Backgammon rules, with the exception of *higher number precedence* (where if a move can be made according to either one die, bu not both, the higher number must be played). The doubling cube is also not included.
+Rules are per the classic Backgammon rules, with the exception of *higher number precedence* (where if a move can be made according to either one die, bu not both, the higher number must be played). The doubling cube is also omitted for simplicity's sake.
 
 Before each game, players must choose a stake amount they are willing to play for. Once the game has finished, the staked amount will be subtracted from the loser and added to the winners total points.
 
