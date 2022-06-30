@@ -5,6 +5,7 @@ public class Game : CanvasLayer
 	private Board				_board;
 	private BoardRenderer 		_boardRenderer;
 	private DiceRenderer 		_diceRenderer;
+	private HomeRenderer		_homeRenderer;
 	private Label 				_gameAlertLabel;
 	private Label				_player1Label;
 	private Label				_player2Label;
@@ -13,11 +14,12 @@ public class Game : CanvasLayer
 	private DiceResultIndicator _resultIndicator;
 	private PausePopup			_pausePopup;
 	private GameFinishedPopup	_gameFinishedPopup;
-	
+
 	public override void _Ready()
 	{
 		_board 				= GetNode<Board>("Game/Board") 								as Board;
 		_diceRenderer 		= GetNode<DiceRenderer>("Game/DiceRenderer") 				as DiceRenderer;
+		_homeRenderer		= GetNode<HomeRenderer>("HomeRenderer")						as HomeRenderer;
 		_gameAlertLabel 	= GetNode<Label>("Game/MarginContainer/GameAlert") 			as Label;
 		_player1Label 		= GetNode<Label>("Game/Player1Label") 						as Label;
 		_player2Label 		= GetNode<Label>("Game/Player2Label") 						as Label;
@@ -33,6 +35,7 @@ public class Game : CanvasLayer
 		_board.Connect("OnGameAlert", 	this, 				"_OnGameAlert");
 		_board.Connect("MoveUsed", 		_resultIndicator, 	"OnMoveUsed");
 		_board.Connect("OnGameFinished",this, 				"_OnGameFinished");
+		_board.Connect("OnBearOff",		_homeRenderer,		"OnBearOff");
 		_board.Initialize();
 
 		_pausePopup.Connect("OnPause", 			 	 this, 	"_OnPause");
@@ -58,6 +61,7 @@ public class Game : CanvasLayer
 	private void _OnRequestRematch()
 	{
 		_gameFinishedPopup.Hide();
+		_homeRenderer.Reset();
 		_board.Reset();
 		_board.Initialize();
 	}

@@ -79,6 +79,7 @@ focus_previous = NodePath("../StatisticsButton")
 text = "Quit"
 
 [node name="PlayPopup" parent="." instance=ExtResource( 4 )]
+visible = false
 
 [node name="OptionsPopup" parent="." instance=ExtResource( 6 )]
 

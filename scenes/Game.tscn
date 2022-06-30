@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/game/Game.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Board.tscn" type="PackedScene" id=2]
@@ -11,7 +11,8 @@
 [ext_resource path="res://src/tween/DiceResultTween.cs" type="Script" id=9]
 [ext_resource path="res://assets/themes/BackgammonTheme.tres" type="Theme" id=10]
 [ext_resource path="res://scenes/GameFinishedPopup.tscn" type="PackedScene" id=11]
-[ext_resource path="res://scenes/PausePopup.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scenes/HomeRenderer.cs" type="Script" id=12]
+[ext_resource path="res://scenes/PausePopup.tscn" type="PackedScene" id=13]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -100,11 +101,23 @@ theme = ExtResource( 10 )
 text = "RED"
 align = 1
 
-[node name="Player1HomeSprites" type="VBoxContainer" parent="Game"]
+[node name="HomeRenderer" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 12 )
+
+[node name="Player1HomeSprites" type="VBoxContainer" parent="HomeRenderer"]
 margin_left = 1562.0
 margin_top = 72.0
 margin_right = 1662.0
 margin_bottom = 356.0
+
+[node name="Player2HomeSprites" type="VBoxContainer" parent="HomeRenderer"]
+margin_left = 1562.0
+margin_top = 724.0
+margin_right = 1662.0
+margin_bottom = 1008.0
+alignment = 2
 
 [node name="DiceResultIndicator" type="Control" parent="."]
 anchor_right = 1.0
@@ -136,4 +149,4 @@ script = ExtResource( 9 )
 
 [node name="GameFinishedPopup" parent="." instance=ExtResource( 11 )]
 
-[node name="PausePopup" parent="." instance=ExtResource( 12 )]
+[node name="PausePopup" parent="." instance=ExtResource( 13 )]

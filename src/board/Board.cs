@@ -6,11 +6,11 @@ public class Board : Node2D
 {
 	RandomNumberGenerator _rng;
 	
-	private static int _boardPointCount 	= Constants.BOARD_POINT_COUNT;
-	private static int _quarterPointCount 	= _boardPointCount / 4; 
-	private static int _boardPointSize 		= Constants.BOARD_POINT_SIZE;
-	private int[,] _boardPoints 			= new int[_boardPointCount, _boardPointSize];
-	public int[,] BoardPoints 				{ get { return _boardPoints; } }
+	private static int 	_boardPointCount 	= Constants.BOARD_POINT_COUNT;
+	private static int 	_quarterPointCount 	= _boardPointCount / 4; 
+	private static int 	_boardPointSize 	= Constants.BOARD_POINT_SIZE;
+	private int[,] 		_boardPoints 		= new int[_boardPointCount, _boardPointSize];
+	public int[,] 		BoardPoints 		{ get { return _boardPoints; } }
 
 	private static int 	_wallHalfSize 		= Constants.BOARD_WALL_HALF_SIZE;
 	private int[] 		_wall				= new int[_wallHalfSize * 2];
@@ -80,7 +80,6 @@ public class Board : Node2D
 
 	public void Initialize()
 	{
-		//Reset();
 		_boardPoints[18, 0] = 1;
 		_boardPoints[19, 0] = 1;
 		_boardPoints[20, 0] = 1;
@@ -97,6 +96,11 @@ public class Board : Node2D
 			{
 				_boardPoints[column, position] = 0;
 			}
+		}
+
+		for (int i = 0; i < _wall.GetLength(0); i++)
+		{
+			_wall[i] = 0;
 		}
 
 		// Red pieces
@@ -141,9 +145,11 @@ public class Board : Node2D
 		_boardPoints[23, 0] = 2;
 		_boardPoints[23, 1] = 2;
 
+		_hasBorne[0] = false;
+		_hasBorne[1] = false;
 		_moves.Clear();
-		_ChangeBoardState(0);
 		_activePlayer = 1;
+		_ChangeBoardState(0);
 		EmitSignal("OnChangeTurn", _activePlayer);
 	}
 
