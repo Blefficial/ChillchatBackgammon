@@ -8,6 +8,7 @@
 bg_color = Color( 0.0823529, 0.0823529, 0.0823529, 0.917647 )
 
 [node name="GameFinishedPopup" type="Popup"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
@@ -34,24 +35,41 @@ valign = 1
 [node name="WinnerLabel" type="Label" parent="VBoxContainer"]
 margin_top = 304.0
 margin_right = 1920.0
-margin_bottom = 335.0
+margin_bottom = 374.0
 grow_horizontal = 2
+rect_min_size = Vector2( 0, 70 )
 text = "_won and scored a _ (+_ points)!"
 align = 1
 
-[node name="QueryLabel" type="Label" parent="VBoxContainer"]
-margin_top = 339.0
+[node name="Player1PointsLabel" type="Label" parent="VBoxContainer"]
+margin_top = 378.0
 margin_right = 1920.0
-margin_bottom = 739.0
+margin_bottom = 409.0
+grow_horizontal = 2
+text = "_ has now _ points in total!"
+align = 1
+
+[node name="Player2PointsLabel" type="Label" parent="VBoxContainer"]
+margin_top = 413.0
+margin_right = 1920.0
+margin_bottom = 444.0
+grow_horizontal = 2
+text = "_ has now _ points in total!"
+align = 1
+
+[node name="QueryLabel" type="Label" parent="VBoxContainer"]
+margin_top = 448.0
+margin_right = 1920.0
+margin_bottom = 848.0
 rect_min_size = Vector2( 0, 400 )
 text = "Would you like to play again?"
 align = 1
 valign = 1
 
 [node name="ButtonContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_top = 743.0
+margin_top = 852.0
 margin_right = 1920.0
-margin_bottom = 780.0
+margin_bottom = 889.0
 grow_vertical = 0
 alignment = 1
 
