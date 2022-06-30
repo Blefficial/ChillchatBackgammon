@@ -1,7 +1,7 @@
 # ChillchatBackgammon
  Chillchat coding assignment
 
-# Controls
+## Controls
 
 This game features a simple drag-and-drop gameplay mechanic. To move pieces, click on the desired piece, keep the mouse pressed and let go once over the target location.
 
