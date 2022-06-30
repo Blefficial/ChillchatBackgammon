@@ -19,7 +19,6 @@ public class Board : Node2D
 	private List<int> _moves 	= new List<int>();
 	private int _activeColumn 	= -1;
 	private int _activePlayer 	= 1;
-	private int[] _helperMove	= new int[2] { -1, -1 };
 	private Vector2 _boardSize	= Constants.BOARD_SIZE;
 	private float _spacerWidth 	= Constants.BOARD_SPACER_WIDTH;
 	private float _homeWidth 	= Constants.BOARD_HOME_WIDTH;
@@ -80,10 +79,7 @@ public class Board : Node2D
 
 	public void Initialize()
 	{
-		_boardPoints[18, 0] = 1;
-		_boardPoints[19, 0] = 1;
-		_boardPoints[20, 0] = 1;
-		_boardPoints[5, 0] = 2;
+		Reset();
 		EmitSignal("OnBoardUpdate");
 		_ChangeBoardState(0);
 	}
@@ -222,19 +218,6 @@ public class Board : Node2D
 		}
 
 		return -1;
-	}
-
-	private void _SetHelperMove(int column, int position)
-	{
-		_helperMove[0] = column;
-		_helperMove[1] = position;
-		GD.Print("Set helper move " + column + ", " + position);
-		//EmitSignal("OnBoardUpdate");
-	}
-
-	public bool IsHelperMove(int column, int position)
-	{
-		return _helperMove[0] == column && _helperMove[1] == position;
 	}
 
 	private void _AddPiece(int player, int column)
@@ -630,7 +613,6 @@ public class Board : Node2D
 
 	private void _OnSuccessfulMove(int distance)
 	{
-		_SetHelperMove(-1, -1);
 		_UseMove(distance);
 		string movesLeft = "Player" + this._activePlayer + " has " + _moves.Count + " move(s) left:";
 
@@ -914,12 +896,6 @@ public class Board : Node2D
 			}
 
 			_AttemptMove(this._activeColumn, targetColumn);
-		}
-
-		if (Input.IsActionJustPressed("show_help"))
-		{
-			//int[] move = GetFirstValidMove(this._activePlayer, _moves.ToArray());
-			//_SetHelperMove(move[0], move[1]);
 		}
 	}
 }

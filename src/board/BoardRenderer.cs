@@ -19,7 +19,6 @@ public class BoardRenderer : Node2D {
 	private static Sprite[] _checkerSprites = new Sprite[_boardPieceCount + _wallSpriteCount];
 	private static Color 	_colorRed 		= Constants.RED;
 	private static Color 	_colorWhite 	= Constants.WHITE;
-	private static Color 	_colorGrey 		= Constants.GREY;
 	private static Vector2 	_cellPadding 	= Constants.CELL_PADDING;
 	private static Vector2 	_cellSize 		= Constants.CELL_SIZE;
 	private static Vector2 	_boardSize		= Constants.BOARD_SIZE;
@@ -168,12 +167,6 @@ public class BoardRenderer : Node2D {
 				checkerSprite.Visible = piece > 0;
 				checkerSprite.Scale   = _spriteScale;
 
-				if (_board.IsHelperMove(column, position))
-				{
-					color = _colorGrey;
-					checkerSprite.Visible = true;
-				}
-				
 				checkerSprite.SelfModulate = color;
 			}
 		}

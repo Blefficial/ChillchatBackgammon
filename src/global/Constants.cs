@@ -4,7 +4,6 @@ public class Constants : Node
 {
 	public static Color RED 					= new Color(1, 0.4f, 0.4f);
 	public static Color WHITE 					= new Color(1, 1, 1);
-	public static Color GREY 					= new Color(0.5f, 0.5f, 0.5f, 0.8f);
 	public static int PIECES_PER_PLAYER 		= 15;
 	public static float BOARD_SPACER_HEIGHT 	= 35;
 	public static float BOARD_SPACER_WIDTH 		= 72;
