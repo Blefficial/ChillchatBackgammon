@@ -13,7 +13,7 @@ Rules are per the classic Backgammon rules, with the exception of *higher number
 
 Before each game, players must choose a stake amount they are willing to play for. Once the game has finished, the staked amount will be subtracted from the loser and added to the winners total points.
 
-As per classic Backgammon rules, different win conditions may multiply the staked amount before being added or subtracted from the players. This means the players may lose or gain more depending how the game is won.
+In accordance with Backgammon rules, different win conditions may multiply the staked amount before being added or subtracted from the players. This means the players may lose or gain more depending how the game is won.
 
 ### Multipliers
 
