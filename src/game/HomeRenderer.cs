@@ -13,8 +13,8 @@ public class HomeRenderer : Control
 		
 		for (int i = 0; i < Constants.PIECES_PER_PLAYER; i++)
 		{
-			TextureRect P1_textureRect = new TextureRect();
-			P1_textureRect.Texture 	= Constants.CHECKER_TEXTURE_SIDE;
+			TextureRect P1_textureRect 	= new TextureRect();
+			P1_textureRect.Texture 		= Constants.CHECKER_TEXTURE_SIDE;
 			P1_textureRect.Expand		= true;
 			P1_textureRect.RectMinSize	= Constants.CHECKER_TEX_MINSIZE;
 			P1_textureRect.SelfModulate = Constants.RED;

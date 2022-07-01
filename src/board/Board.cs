@@ -426,7 +426,7 @@ public class Board : Node2D
 		return player == 1 ? _wall[0] != 0 : _wall[_wallHalfSize] != 0;
 	}
 
-	public int[] GetFirstValidMove(int player, int[] moves) // TODO: Perhaps rework to return an int[,,,] instead, containing int[fromColumn, fromIndex, toColumn, toIndex];
+	public int[] GetFirstValidMove(int player, int[] moves)
 	{
 		int direction = player == 1 ? 1 : -1;
 
@@ -516,7 +516,7 @@ public class Board : Node2D
 				int topPieceIndex 	= _GetTopPieceIndex(column);
 				if (topPieceIndex == -1)
 				{
-					GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
+					//GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
 					return true;
 				}
 				
@@ -524,18 +524,18 @@ public class Board : Node2D
 
 				if (_boardPoints[column, topPieceIndex] == player)
 				{
-					GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
+					//GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
 					return true;
 				}
 
 				if (topPieceIndex == 0)
 				{
-					GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
+					//GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
 					return true;
 				}
 			}
 
-			GD.Print("Failed to find a valid move");
+			//GD.Print("Failed to find a valid move");
 			return false;
 		}
 
@@ -548,7 +548,7 @@ public class Board : Node2D
 				int fromColumn = homeOffset - (move * direction);
 				if (_boardPoints[fromColumn, 0] == player)
 				{
-					GD.Print(String.Format("Found a valid move {0:D}->HOME", fromColumn));
+					//GD.Print(String.Format("Found a valid move {0:D}->HOME", fromColumn));
 					return true;
 				}
 			}
@@ -571,7 +571,7 @@ public class Board : Node2D
 				topPieceIndex = _GetTopPieceIndex(column + move);
 				if (topPieceIndex < 0)
 				{
-					GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
+					//GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
 					return true;
 				} 
 
@@ -579,7 +579,7 @@ public class Board : Node2D
 				{
 					if (topPieceIndex >= _boardPointSize - 1) continue;
 
-					GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
+					//GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
 					return true;
 				} 
 			}
@@ -609,15 +609,6 @@ public class Board : Node2D
 	private void _OnSuccessfulMove(int distance)
 	{
 		_UseMove(distance);
-		string movesLeft = "Player" + this._activePlayer + " has " + _moves.Count + " move(s) left:";
-
-		foreach (int move in _moves)
-		{
-			movesLeft += String.Format(" [{0:D}] ", move);
-		}
-
-		GD.Print(movesLeft);
-
 		if (_moves.Count == 0 || !_HasValidMove(this._activePlayer, _moves.ToArray()))
 		{
 			_ChangeTurn();
