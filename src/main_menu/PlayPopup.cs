@@ -18,6 +18,7 @@ public class PlayPopup : Popup
 	{
 		if (_player1LineEdit.Text == "" || _player2LineEdit.Text == "") return;
 		if (_player1LineEdit.Text == _player2LineEdit.Text) return;
+		if (_stakesLineEdit.Text == "") return;
 
 		Constants.PLAYER_1 	= _player1LineEdit.Text;
 		Constants.PLAYER_2 	= _player2LineEdit.Text;

@@ -29,6 +29,8 @@ public class StakesLineEdit : LineEdit
 
 	public int GetStakes()
 	{
+		if (Text == null || Text == "") return 1;
+		
 		return Text.ToInt();
 	}
 }
