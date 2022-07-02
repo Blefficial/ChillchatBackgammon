@@ -49,7 +49,6 @@ margin_bottom = 625.0
 mouse_filter = 1
 
 [node name="Controls" type="Tabs" parent="Panel/MarginContainer/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 24.0
@@ -72,10 +71,11 @@ margin_right = 1200.0
 margin_bottom = 201.0
 text = "This game features a simple drag-and-drop gameplay mechanic. To move pieces, click on the desired piece, keep the mouse pressed and let go once over the target location.
 
-At the beginning of each round a player must roll the dice. To do so, simply clikc anywhere on screen. If no valid moves can be made after rolling the dice, the turn will immediately shift to the other player, whom must then roll the dice again."
+At the beginning of each round a player must roll the dice. To do so, simply click anywhere on screen. If no valid moves can be made after rolling the dice, the turn will immediately shift to the other player, whom must then roll the dice again."
 autowrap = true
 
 [node name="Audio" type="Tabs" parent="Panel/MarginContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = 24.0
