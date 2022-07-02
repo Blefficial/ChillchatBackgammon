@@ -29,7 +29,6 @@ public class Board : Node2D
 	/// (-1) 	Paused,
 	/// (0) 	Waiting to throw dice,
 	/// (1) 	Waiting to move piece,
-	/// (2) 	Finished
 	///</summary>
 	private int _boardState 		= -2;
 	private int _previousBoardState = -2;
@@ -215,20 +214,6 @@ public class Board : Node2D
 		return -1;
 	}
 
-	private void _AddPiece(int player, int column)
-	{
-		if (column > _boardPoints.GetLength(0))
-		{
-			GD.Print("Column position exceeds board size");
-			return;
-		}
-
-		int freeSlot = _GetNextFreeSlot(column);
-		if (freeSlot == -1) return;
-
-		_boardPoints[column, freeSlot] = player;
-	}
-
 	private void _AddPieceToWall(int player)
 	{
 		int nextFreeWallSlot 	= _GetNextFreeWallSlot(player);
@@ -272,7 +257,6 @@ public class Board : Node2D
 			result += String.Format("[{0:D}]", move);
 		}
 
-		GD.Print(result);
 		EmitSignal("OnDiceThrow", _moves);
 		_ChangeBoardState(1);
 
@@ -407,8 +391,6 @@ public class Board : Node2D
 				return;
 			}
 		}
-
-		//GD.Print("Cannot bear off attempted piece");
 	}
 
 	private bool _CanBearOff(int player)
@@ -516,7 +498,6 @@ public class Board : Node2D
 				int topPieceIndex 	= _GetTopPieceIndex(column);
 				if (topPieceIndex == -1)
 				{
-					//GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
 					return true;
 				}
 				
@@ -524,18 +505,15 @@ public class Board : Node2D
 
 				if (_boardPoints[column, topPieceIndex] == player)
 				{
-					//GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
 					return true;
 				}
 
 				if (topPieceIndex == 0)
 				{
-					//GD.Print(String.Format("Found a valid move WALL->{0:D}", column));
 					return true;
 				}
 			}
 
-			//GD.Print("Failed to find a valid move");
 			return false;
 		}
 
@@ -548,7 +526,6 @@ public class Board : Node2D
 				int fromColumn = homeOffset - (move * direction);
 				if (_boardPoints[fromColumn, 0] == player)
 				{
-					//GD.Print(String.Format("Found a valid move {0:D}->HOME", fromColumn));
 					return true;
 				}
 			}
@@ -571,7 +548,6 @@ public class Board : Node2D
 				topPieceIndex = _GetTopPieceIndex(column + move);
 				if (topPieceIndex < 0)
 				{
-					//GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
 					return true;
 				} 
 
@@ -579,13 +555,11 @@ public class Board : Node2D
 				{
 					if (topPieceIndex >= _boardPointSize - 1) continue;
 
-					//GD.Print(String.Format("Found a valid move {0:D}->{1:D}", column, column + move));
 					return true;
 				} 
 			}
 		}
 		
-		GD.Print("Failed to find a valid move");
 		return false;
 	}
 
@@ -594,7 +568,6 @@ public class Board : Node2D
 		this._activePlayer 	= this._activePlayer == 1 ? 2 : 1;
 		string player 		= this._activePlayer == 1 ? "RED" : "WHITE";
 
-		GD.Print("Player " + _activePlayer + "'s turn!");
 		EmitSignal("OnChangeTurn", this._activePlayer);
 		_SendGameAlert(player + "'s turn! Click to roll dice.");
 		_ChangeBoardState(0);
@@ -627,14 +600,12 @@ public class Board : Node2D
 		{
 			if (fromColumn > toColumn) 
 			{
-				//GD.Print("Unable to reach: Player 1 must move clockwise.");
 				_SendGameAlert("RED must move clockwise");
 				return false;
 			}
 		} 
 		else if (fromColumn < toColumn)
 		{
-			//GD.Print("Unable to reach: Player 2 must move counter-clockwise.");
 			_SendGameAlert("WHITE must move counter-clockwise");
 			return false;
 		}
@@ -683,7 +654,6 @@ public class Board : Node2D
 
 		if (!canReach)
 		{
-			//GD.Print("Unable to move from wall, no moves left matched the attempted move.");
 			_SendGameAlert("Unable to move from wall, no moves left matched the attempted move.");
 			return;
 		}
@@ -691,14 +661,12 @@ public class Board : Node2D
 		int topPieceIndex = _GetTopPieceIndex(toColumn);
 		if (topPieceIndex > _boardPointSize - 1)
 		{
-			//GD.Print("Unable to move from wall, target column is full.");
 			_SendGameAlert("Unable to move from wall, target column is full.");
 			return;
 		};
 
 		if (topPieceIndex == -1)
 		{
-			//GD.Print("Move success: WALL->" + toColumn);
 			_MoveFromWall(toColumn);
 			_OnSuccessfulMove(distanceToColumn);
 			return;
@@ -706,7 +674,6 @@ public class Board : Node2D
 
 		if (topPieceIndex == 0)
 		{
-			//GD.Print("Move success: WALL->" + toColumn);
 			_MoveFromWall(toColumn);
 			_OnSuccessfulMove(distanceToColumn);
 			return;
@@ -714,13 +681,10 @@ public class Board : Node2D
 
 		if (_boardPoints[toColumn, topPieceIndex] == _activePlayer)
 		{
-			//GD.Print("Move success: WALL->" + toColumn);
 			_MoveFromWall(toColumn);
 			_OnSuccessfulMove(distanceToColumn);
 			return;
 		}
-
-		//GD.Print("Failed to move from wall");
 	}
 
 	private void _AttemptMove(int fromColumn, int toColumn) 
@@ -729,20 +693,17 @@ public class Board : Node2D
 		
 		if (!_CanReach(fromColumn, toColumn))
 		{
-			//GD.Print("Move failed: No fitting moves.");
 			_SendGameAlert("Attempted move does not match any move left.");
 			return;
 		}
 
 		int topPieceIndex = _GetTopPieceIndex(fromColumn);
 		if (topPieceIndex == -1) {
-			//GD.Print("Move failed: No piece in column: " + fromColumn);
 			return;
 		}
 
 		if (_boardPoints[fromColumn, topPieceIndex] != this._activePlayer)
 		{
-			//GD.Print("Move failed: Tried to move opponets piece from column: " + fromColumn + "->" + toColumn);
 			_SendGameAlert("Cannot move opponets pieces!");
 			return;
 		}
@@ -750,7 +711,6 @@ public class Board : Node2D
 		topPieceIndex = _GetTopPieceIndex(toColumn);
 		if (topPieceIndex < 0)
 		{
-			//GD.Print("Move success: " + fromColumn + "->" + toColumn);
 			_MovePiece(fromColumn, toColumn);
 			_OnSuccessfulMove(fromColumn, toColumn);
 			return;
@@ -760,7 +720,6 @@ public class Board : Node2D
 		{
 			if (topPieceIndex == 0)
 			{
-				//GD.Print("Move success: " + fromColumn + "->" + toColumn);
 				_ReplacePiece(fromColumn, toColumn);
 				_OnSuccessfulMove(fromColumn, toColumn);
 				return;
@@ -771,13 +730,11 @@ public class Board : Node2D
 		{
 			if (topPieceIndex < _boardPointSize - 1)
 			{
-				//GD.Print("Move success: " + fromColumn + "->" + toColumn);
 				_MovePiece(fromColumn, toColumn);
 				_OnSuccessfulMove(fromColumn, toColumn);
 				return;
 			}
 
-			//GD.Print("Move failed: toColumn is full " + fromColumn + "->" + toColumn);
 			_SendGameAlert("That column is full!");
 		}
 	}
@@ -870,7 +827,6 @@ public class Board : Node2D
 					return;
 				}
 
-				//GD.Print("Player must move a piece from the wall!");
 				_SendGameAlert("Player must move a piece from the wall!");
 				return;
 			}
