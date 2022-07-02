@@ -19,8 +19,8 @@ public class PlayerData : Node {
 		if (!file.FileExists(_SETTINGS_PATH))
 		{
 			SETTINGS = new Dictionary() {
-				{ "master_volume", -12 },
-				{ "sfx_volume", -12 }
+				{ "master_volume", -12f },
+				{ "sfx_volume", -12f }
 			};
 
 			SaveSettings();
